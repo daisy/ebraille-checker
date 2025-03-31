@@ -9,20 +9,20 @@
         <version>7</version>
     </parent>
 
-    <groupId>org.w3c</groupId>
-    <artifactId>epubcheck</artifactId>
-    <version>5.2.2-SNAPSHOT</version>
+    <groupId>org.daisy</groupId>
+    <artifactId>ebraille-checker</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
-    <name>EPUBCheck :: the EPUB conformance checker</name>
-    <description>EPUBCheck is the official conformance checker for EPUB publications. EPUBCheck can be run as a standalone command-line tool or used
+    <name>eBraille Checker :: the eBraille conformance checker</name>
+    <description>eBraille Checker is the conformance checker for eBraille publications. eBraille Checker can be run as a standalone command-line tool or used
       as a Java library.</description>
-    <url>https://github.com/w3c/epubcheck</url>
-    <inceptionYear>2007</inceptionYear>
+    <url>https://github.com/daisy/ebraille-checker</url>
+    <inceptionYear>2025</inceptionYear>
     <organization>
-        <name>The World Wide Web Consortium (W3C)</name>
-        <url>https://www.w3.org</url>
+        <name>The DAISY Consortium</name>
+        <url>https://daisy.org</url>
     </organization>
     <licenses>
         <license>
@@ -39,28 +39,15 @@
             <organization>DAISY Consortium</organization>
         </developer>
     </developers>
-    <mailingLists>
-        <mailingList>
-            <name>EPUBCheck discussion</name>
-            <subscribe>mailto:public-epubcheck-request@w3.org?subject=subscribe</subscribe>
-            <unsubscribe>mailto:public-epubcheck-request@w3.org?subject=unsubscribe</unsubscribe>
-            <post>public-epubcheck@w3.org</post>
-            <archive>https://lists.w3.org/Archives/Public/public-epubcheck/</archive>
-        </mailingList>
-        <mailingList>
-            <name>ARCHIVE: epubcheck discussion</name>
-            <archive>https://groups.google.com/forum/#!forum/epubcheck</archive>
-        </mailingList>
-    </mailingLists>
     <scm>
-        <connection>scm:git:ssh://git@github.com:w3c/epubcheck.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:w3c/epubcheckgit</developerConnection>
-        <url>https://github.com/w3c/epubcheck</url>
+        <connection>scm:git:ssh://git@github.com:daisy/ebraille-checker.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:daisy/ebraille-checker</developerConnection>
+        <url>https://github.com/daisy/ebraille-checker</url>
         <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/w3c/epubcheck/issues</url>
+        <url>https://github.com/daisy/ebraille-checker/issues</url>
     </issueManagement>
 
     <distributionManagement>

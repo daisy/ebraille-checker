@@ -14,7 +14,7 @@ import com.google.common.collect.ObjectArrays;
 public class CheckerIT
 {
 
-  private static final String[] cmd = new String[] { "java", "-jar", "target/epubcheck.jar" };
+  private static final String[] cmd = new String[] { "java", "-jar", "target/ebraille-checker.jar" };
   private static String valid30EPUB = "src/test/resources/epub3/02-epub-publication-conformance/files/";
 
   @Test
