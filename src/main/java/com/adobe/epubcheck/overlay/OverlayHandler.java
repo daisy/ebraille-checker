@@ -9,6 +9,7 @@ import org.w3c.epubcheck.core.references.Reference;
 import org.w3c.epubcheck.util.url.URLUtils;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.opf.OPFChecker30;
 import com.adobe.epubcheck.opf.ValidationContext;
@@ -238,6 +239,14 @@ public class OverlayHandler extends XMLHandler
 
     for (ITEM_PROPERTIES requiredProperty : Sets.difference(requiredProperties, itemProps))
     {
+      // For eBraille, we basically ignore the "resmote-resources" property;
+      // the remote resource reference is reported elsewhere.
+      if (context.profile == EPUBProfile.EBRAILLE
+          && requiredProperty == ITEM_PROPERTIES.REMOTE_RESOURCES)
+      {
+        continue;
+      }
+      // Otherwise, report the missing property
       report.message(MessageId.OPF_014, EPUBLocation.of(context),
           PackageVocabs.ITEM_VOCAB.getName(requiredProperty));
     }

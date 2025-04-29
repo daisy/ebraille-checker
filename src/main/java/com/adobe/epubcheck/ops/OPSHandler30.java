@@ -1050,6 +1050,14 @@ public class OPSHandler30 extends OPSHandler
 
     for (ITEM_PROPERTIES requiredProperty : Sets.difference(requiredProperties, itemProps))
     {
+      // For eBraille, we basically ignore the "resmote-resources" property;
+      // the remote resource reference is reported elsewhere.
+      if (context.profile == EPUBProfile.EBRAILLE
+          && requiredProperty == ITEM_PROPERTIES.REMOTE_RESOURCES)
+      {
+        continue;
+      }
+      // Otherwise, report the missing property
       report.message(MessageId.OPF_014, EPUBLocation.of(context),
           PackageVocabs.ITEM_VOCAB.getName(requiredProperty));
     }
@@ -1063,7 +1071,11 @@ public class OPSHandler30 extends OPSHandler
     if (uncheckedProperties.contains(ITEM_PROPERTIES.REMOTE_RESOURCES))
     {
       uncheckedProperties.remove(ITEM_PROPERTIES.REMOTE_RESOURCES);
-      if (!requiredProperties.contains(ITEM_PROPERTIES.SCRIPTED))
+      if (context.profile == EPUBProfile.EBRAILLE)
+      {
+        report.message(MessageId.EBR_002, context.opfItem.get().getLocation());
+      }
+      else if (!requiredProperties.contains(ITEM_PROPERTIES.SCRIPTED))
       {
         report.message(MessageId.OPF_018, location());
       }

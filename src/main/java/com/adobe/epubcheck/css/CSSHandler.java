@@ -23,6 +23,7 @@ import org.w3c.epubcheck.core.references.URLChecker;
 import org.w3c.epubcheck.core.references.Reference;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.api.Report;
 import com.adobe.epubcheck.css.CSSChecker.Mode;
 import com.adobe.epubcheck.messages.MessageId;
@@ -450,6 +451,14 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
     // Check that all properties found in the doc are declared on the OPF item
     for (ITEM_PROPERTIES property : Sets.difference(detectedProperties, declaredProperties))
     {
+      // For eBraille, we basically ignore the "resmote-resources" property;
+      // the remote resource reference is reported elsewhere.
+      if (context.profile == EPUBProfile.EBRAILLE
+          && property == ITEM_PROPERTIES.REMOTE_RESOURCES)
+      {
+        continue;
+      }
+      // Otherwise, report the missing property
       report.message(MessageId.OPF_014,
           EPUBLocation.of(context).at(startingLineNumber, startingColumnNumber),
           PackageVocabs.ITEM_VOCAB.getName(property));
@@ -464,8 +473,13 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
       if (uncheckedProperties.contains(ITEM_PROPERTIES.REMOTE_RESOURCES))
       {
         uncheckedProperties.remove(ITEM_PROPERTIES.REMOTE_RESOURCES);
-        report.message(MessageId.OPF_018,
-            EPUBLocation.of(context).at(startingLineNumber, startingColumnNumber));
+        if (context.profile == EPUBProfile.EBRAILLE)
+        {
+          report.message(MessageId.EBR_002, context.opfItem.get().getLocation());
+        } else {
+          report.message(MessageId.OPF_018,
+              EPUBLocation.of(context).at(startingLineNumber, startingColumnNumber));
+        }
       }
     }
 

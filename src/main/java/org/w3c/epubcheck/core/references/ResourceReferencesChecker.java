@@ -34,6 +34,7 @@ import org.w3c.epubcheck.constants.MIMEType;
 import org.w3c.epubcheck.core.CheckAbortException;
 import org.w3c.epubcheck.util.url.URLFragment;
 
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.api.LocalizableReport;
 import com.adobe.epubcheck.api.Report;
 import com.adobe.epubcheck.messages.LocalizedMessages;
@@ -51,6 +52,7 @@ import io.mola.galimatias.URL;
 public class ResourceReferencesChecker
 {
 
+  private final ValidationContext context;
   private final Report report;
   private final OCFContainer container;
   private final EPUBVersion version;
@@ -62,6 +64,7 @@ public class ResourceReferencesChecker
 
   public ResourceReferencesChecker(ValidationContext context)
   {
+    this.context = Preconditions.checkNotNull(context);
     Preconditions.checkArgument(context.container.isPresent());
     Preconditions.checkArgument(context.resourceRegistry.isPresent());
     Preconditions.checkArgument(context.referenceRegistry.isPresent());
@@ -362,17 +365,19 @@ public class ResourceReferencesChecker
         // spine items are checked in OPFChecker30
         && !(version == EPUBVersion.VERSION_3 && targetResource.isPresent()
             && targetResource.get().isInSpine())
-        // audio, video, and fonts can be remote resources in EPUB 3
-        && !(version == EPUBVersion.VERSION_3 && (targetResource.isPresent()
-            // if the item is declared, check its mime type
-            && (OPFChecker30.isAudioType(targetResource.get().getMimeType())
-                || OPFChecker30.isVideoType(targetResource.get().getMimeType())
-                || OPFChecker30.isFontType(targetResource.get().getMimeType()))
-            // else, check if the reference is a type allowing remote
-            // resources
-            || reference.type == Reference.Type.FONT
-            || reference.type == Reference.Type.AUDIO
-            || reference.type == Reference.Type.VIDEO)))
+        // remote resources are not allowed in eBraille
+        && (context.profile == EPUBProfile.EBRAILLE
+            // audio, video, and fonts can be remote resources in EPUB 3
+            || !(version == EPUBVersion.VERSION_3 && (targetResource.isPresent()
+                // if the item is declared, check its mime type
+                && (OPFChecker30.isAudioType(targetResource.get().getMimeType())
+                    || OPFChecker30.isVideoType(targetResource.get().getMimeType())
+                    || OPFChecker30.isFontType(targetResource.get().getMimeType()))
+                // else, check if the reference is a type allowing remote
+                // resources
+                || reference.type == Reference.Type.FONT
+                || reference.type == Reference.Type.AUDIO
+                || reference.type == Reference.Type.VIDEO))))
     {
       report.message(MessageId.RSC_006, reference.location, reference.url);
       throw new CheckAbortException();

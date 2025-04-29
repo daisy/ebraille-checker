@@ -141,9 +141,11 @@ public class OPFChecker30 extends OPFChecker
     // Check remote resources
     String mediatype = item.getMimeType();
     if (item.isRemote()
-        // audio, video, and fonts can be remote resources
-        && !(isAudioType(mediatype) || isVideoType(mediatype)
-            || "application/x-shockwave-flash".equals(mediatype) || isFontType(mediatype)))
+        // eBraille does not support remote resources
+        && (context.profile == EPUBProfile.EBRAILLE
+            // audio, video, and fonts can be remote resources
+            || !(isAudioType(mediatype) || isVideoType(mediatype)
+                || "application/x-shockwave-flash".equals(mediatype) || isFontType(mediatype))))
     {
       // spine items cannot be remote resources
       // (except, theoretically, for video/audio/fonts)
