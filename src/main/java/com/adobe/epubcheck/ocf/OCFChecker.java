@@ -33,6 +33,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.daisy.ebraille.EBrailleExtensionChecker;
 import org.daisy.ebraille.EBrailleSpecialFile;
 import org.w3c.epubcheck.constants.MIMEType;
 import org.w3c.epubcheck.core.AbstractChecker;
@@ -266,11 +267,12 @@ public final class OCFChecker extends AbstractChecker
     if (!OCFMetaFile.CONTAINER.isPresent(container))
     {
       // eBraille profile: META-INF is optional
-      if (!container.isPackaged() &&context.profile == EPUBProfile.EBRAILLE)
+      if (!container.isPackaged() && context.profile == EPUBProfile.EBRAILLE)
       {
         // We add the well-known package document location
         // as a candidate root file
-        state.addRootfile("application/oebps-package+xml", EBrailleSpecialFile.PACKAGE.asURL(container));
+        state.addRootfile("application/oebps-package+xml",
+            EBrailleSpecialFile.PACKAGE.asURL(container));
         return true;
       }
 
@@ -469,6 +471,11 @@ public final class OCFChecker extends AbstractChecker
 
   private void checkFileExtension(OCFCheckerState state)
   {
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      new EBrailleExtensionChecker(state.context().build()).check();
+      return;
+    }
     File packageFile = new File(context.path);
     // If the container is packaged (= not a directory):
     if (packageFile.isFile())

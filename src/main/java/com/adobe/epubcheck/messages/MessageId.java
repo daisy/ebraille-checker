@@ -30,7 +30,7 @@ public enum MessageId implements Comparable<MessageId>
 {
   // General info messages
   INF_001("INF-001"),
-  
+
   // Messages relating to accessibility
   ACC_001("ACC-001"),
   ACC_002("ACC-002"),
@@ -87,6 +87,9 @@ public enum MessageId implements Comparable<MessageId>
   CSS_028("CSS-028"),
   CSS_029("CSS-029"),
   CSS_030("CSS-030"),
+
+  // eBraille
+  EBR_001("EBR-001"),
 
   // Messages relating to xhtml markup
   HTM_001("HTM-001"),

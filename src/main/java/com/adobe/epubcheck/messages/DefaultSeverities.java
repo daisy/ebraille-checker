@@ -94,6 +94,9 @@ class DefaultSeverities implements Severities
     severities.put(MessageId.CSS_029, Severity.USAGE);
     severities.put(MessageId.CSS_030, Severity.ERROR);
 
+    // eBraille
+    severities.put(MessageId.EBR_001, Severity.ERROR);
+
     // HTML
     severities.put(MessageId.HTM_001, Severity.ERROR);
     severities.put(MessageId.HTM_002, Severity.WARNING);
