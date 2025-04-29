@@ -15,7 +15,19 @@ public final class AccessibilityVocab
   {
     CERTIFIED_BY,
     CERTIFIER_CREDENTIAL,
-    EXEMPTION
+    EXEMPTION,
+
+    // eBraille bibliographic properties
+    COMPLETE_TRANSCRIPTION,
+    PRODUCER,
+
+    // eBraille content properties
+    BRAILLE_CELL_TYPE,
+    BRAILLE_SYSTEM,
+    GRAPHIC_TYPE,
+    MINIMUM_CELLS,
+    MINIMUM_LINES,
+    TACTILE_GRAPHICS,
   }
 
   public static enum LINKREL_PROPERTIES
