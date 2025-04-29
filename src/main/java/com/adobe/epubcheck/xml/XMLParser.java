@@ -39,6 +39,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.api.Report;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.opf.ValidationContext;
@@ -149,6 +150,11 @@ public class XMLParser
           if (MIMEType.XHTML.is(context.mimeType))
           {
             report.message(MessageId.HTM_058, EPUBLocation.of(context));
+          }
+          // eBraille requires UTF-8
+          else if(context.profile == EPUBProfile.EBRAILLE)
+          {
+            report.message(MessageId.RSC_028, EPUBLocation.of(context), encoding);
           }
           // For other XML types, UTF-16 is reported as a warning
           else
