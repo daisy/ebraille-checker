@@ -31,6 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import org.daisy.ebraille.EBrailleSpecialFile;
 import org.w3c.epubcheck.constants.MIMEType;
 import org.w3c.epubcheck.core.AbstractChecker;
 import org.w3c.epubcheck.core.Checker;
@@ -198,7 +201,7 @@ public final class OCFChecker extends AbstractChecker
             && !Iterables.tryFind(opfHandlers, new Predicate<OPFHandler>()
             {
               @Override
-              public boolean apply(OPFHandler opfHandler)
+              public boolean apply(@Nonnull OPFHandler opfHandler)
               {
                 // found if declared as an OPF item
                 // or in an EPUB 3 link element
@@ -262,6 +265,15 @@ public final class OCFChecker extends AbstractChecker
     // If absent, report and return early.
     if (!OCFMetaFile.CONTAINER.isPresent(container))
     {
+      // eBraille profile: META-INF is optional
+      if (!container.isPackaged() &&context.profile == EPUBProfile.EBRAILLE)
+      {
+        // We add the well-known package document location
+        // as a candidate root file
+        state.addRootfile("application/oebps-package+xml", EBrailleSpecialFile.PACKAGE.asURL(container));
+        return true;
+      }
+
       // do not report the missing container entry if a fatal error was already
       // reported
       if (report.getFatalErrorCount() == 0)
@@ -473,7 +485,8 @@ public final class OCFChecker extends AbstractChecker
     {
       // Report a missing mimetype file only for expanded containers only
       // Mimetype existence is checked from zipped content otherwise
-      if (!container.isPackaged())
+      // eBraille profile: mimetype file is optional
+      if (!container.isPackaged() && context.profile != EPUBProfile.EBRAILLE)
       {
         report.message(MessageId.PKG_006, OCFMetaFile.MIMETYPE.asLocation(container));
       }

@@ -10,7 +10,8 @@ public enum EPUBProfile
   IDX,
   DICT,
   EDUPUB,
-  PREVIEW;
+  PREVIEW,
+  EBRAILLE;
 
   /**
    * Checks this validation profile against the dc:type(s) declared in an OPF
