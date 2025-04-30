@@ -407,13 +407,14 @@ public class CssGrammar
       LENGTH,
       EMS,
       EXS,
+      REMS,
+      CHS,
       ANGLE,
       TIME,
       FREQ,
       RESOLUTION,
       NUMBER,
       INTEGER,
-      REMS
     }
 
     @Override
@@ -1471,6 +1472,7 @@ public class CssGrammar
         .put(CssToken.Type.QNTY_REMS, BUILDER_QNTY)
         .put(CssToken.Type.QNTY_EMS, BUILDER_QNTY)
         .put(CssToken.Type.QNTY_EXS, BUILDER_QNTY)
+        .put(CssToken.Type.QNTY_CHS, BUILDER_QNTY)
         .put(CssToken.Type.QNTY_FREQ, BUILDER_QNTY)
         .put(CssToken.Type.QNTY_LENGTH, BUILDER_QNTY)
         .put(CssToken.Type.QNTY_PERCENTAGE, BUILDER_QNTY)
@@ -1502,6 +1504,7 @@ public class CssGrammar
         .put(CssToken.Type.QNTY_REMS, CssQuantity.Unit.REMS)
         .put(CssToken.Type.QNTY_EMS, CssQuantity.Unit.EMS)
         .put(CssToken.Type.QNTY_EXS, CssQuantity.Unit.EXS)
+        .put(CssToken.Type.QNTY_CHS, CssQuantity.Unit.CHS)
         .put(CssToken.Type.QNTY_FREQ, CssQuantity.Unit.FREQ)
         .put(CssToken.Type.QNTY_LENGTH, CssQuantity.Unit.LENGTH)
         .put(CssToken.Type.QNTY_PERCENTAGE, CssQuantity.Unit.PERCENTAGE)
