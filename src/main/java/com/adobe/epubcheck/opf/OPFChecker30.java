@@ -65,6 +65,7 @@ public class OPFChecker30 extends OPFChecker
   protected boolean checkPackage()
   {
     super.checkPackage();
+    checkEBrailleStructure();
     checkCollectionsContent();
     checkPagination();
     checkSemantics();
@@ -362,6 +363,40 @@ public class OPFChecker30 extends OPFChecker
     }
   }
 
+  private void checkEBrailleStructure()
+  {
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      // the package document must be in the root
+      if (path.contains("/"))
+      {
+        report.message(MessageId.EBR_003, EPUBLocation.of(context));
+      }
+      // the package document must be named 'package.opf'
+      else if (!"package.opf".equals(path))
+      {
+        report.message(MessageId.EBR_004, EPUBLocation.of(context));
+      }
+      // get the nav doc
+      for (OPFItem item : opfHandler.getItems())
+      {
+        if (item.isNav())
+        {
+          // the package document must be in the root
+          if (item.getPath().contains("/"))
+          {
+            report.message(MessageId.EBR_005, EPUBLocation.of(context));
+          }
+          // the package document must be named 'package.opf'
+          else if (!"index.html".equals(item.getPath()))
+          {
+            report.message(MessageId.EBR_006, EPUBLocation.of(context));
+          }
+        }
+      }
+    }
+  }
+
   private void checkIndexCollection(ResourceCollection collection)
   {
     if (collection.hasRole(Roles.INDEX) || collection.hasRole(Roles.INDEX_GROUP))
@@ -565,7 +600,8 @@ public class OPFChecker30 extends OPFChecker
 
   public static boolean isBlessedAudioType(String type)
   {
-    return type.equals("audio/mpeg") || type.equals("audio/mp4") || type.matches("audio/ogg\\s*;\\s*codecs=opus");
+    return type.equals("audio/mpeg") || type.equals("audio/mp4")
+        || type.matches("audio/ogg\\s*;\\s*codecs=opus");
   }
 
   public static boolean isVideoType(String type)

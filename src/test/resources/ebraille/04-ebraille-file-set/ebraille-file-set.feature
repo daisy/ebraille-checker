@@ -43,14 +43,33 @@ Feature: eBraille — eBraille file set
       Then error RSC-006 is reported
       And no other errors or warnings are reported
 
+  Rule: the package document MUST be in the publication root
+
+    Example: report a package document no located in the publication root
+      When checking file set 'package-doc-not-in-root-error'
+      Then error EBR-003 is reported
+      And no other errors or warnings are reported
+
+  Rule: the package document MUST be named 'package.opf'
+
+    Example: report a package document incorrectly named
+      When checking file set 'package-doc-incorrect-name-error'
+      Then error EBR-004 is reported
+      And no other errors or warnings are reported
+
   Rule: the navigation document MUST be in the publication root
 
-#     Example: TBD
-#       When checking publication ''
-#       Then error XXX is reported
-#       And no other errors or warnings are reported
+    Example: report a navigation document no located in the publication root
+      When checking file set 'nav-doc-not-in-root-error'
+      Then error EBR-005 is reported
+      And no other errors or warnings are reported
 
   Rule: the navigation document MUST be named 'index.html'
+
+    Example: report a navigation document incorrectly named
+      When checking file set 'nav-doc-incorrect-name-error'
+      Then error EBR-006 is reported
+      And no other errors or warnings are reported
 
 #     Example: TBD
 #       When checking publication ''
