@@ -295,3 +295,10 @@ Feature: eBraille — Package document
       Then error EBR-020 is reported
       And no other errors or warnings are reported
 
+  Rule: `collection` MUST NOT be used
+
+    Example: report a package document using NCX navigation
+      When checking file 'unsupported-collection-error.opf'
+      Then error EBR-021 is reported
+      And no other errors or warnings are reported
+

@@ -59,6 +59,7 @@ import org.w3c.epubcheck.core.references.Reference;
 import org.w3c.epubcheck.util.url.URLUtils;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.api.QuietReport;
 import com.adobe.epubcheck.messages.LocalizedMessages;
 import com.adobe.epubcheck.messages.MessageId;
@@ -239,6 +240,10 @@ public class OPFHandler30 extends OPFHandler
       }
       else if (name.equals("collection"))
       {
+        if (context.profile == EPUBProfile.EBRAILLE)
+        {
+          report.message(MessageId.EBR_021, location());
+        }
         collectionBuilders.addFirst(
             ResourceCollection.builder().roles(processCollectionRole(e.getAttribute("role"))));
         linkedResourcesBuilders.addFirst(LinkedResources.builder());
