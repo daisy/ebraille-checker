@@ -71,11 +71,6 @@ Feature: eBraille — eBraille file set
       Then error EBR-006 is reported
       And no other errors or warnings are reported
 
-#     Example: TBD
-#       When checking publication ''
-#       Then error XXX is reported
-#       And no other errors or warnings are reported
-
   ## 4.3 File paths and file names
 
   Rule: eBraille file paths and file names MUST adhere to the EPUB 3 file naming restrictions
@@ -85,28 +80,25 @@ Feature: eBraille — eBraille file set
   ## 4.4 URLs in the file set
 
   Rule: eBraille file paths and file names MUST adhere to the EPUB 3 file naming restrictions
-   
+
    This is a duplicate statement, already covered by checks for "4.2 File and directory structure".
 
   Rule: the eBraille file set MUST NOT include file references that use path-absolute-URL strings
 
-#     Example: TBD
-#       When checking publication ''
-#       Then error XXX is reported
-#       And no other errors or warnings are reported
+   This is statement is redundant, already covered by EPUB (URLs in the OCF abstract container)
 
   ## 4.5 Multiple renditions
 
   Rule: an eBraille publication MAY contain multipled renditions of the content
 
-#     Example: TBD
-#       When checking publication ''
+#     Example: TODO
+#       When checking file set ''
 #       Then error XXX is reported
 #       And no other errors or warnings are reported
 
   Rule: the default rendition MUST be a braille rendition
 
-#     Example: TBD
-#       When checking publication ''
+#     Example: TODO
+#       When checking file set ''
 #       Then error XXX is reported
 #       And no other errors or warnings are reported
