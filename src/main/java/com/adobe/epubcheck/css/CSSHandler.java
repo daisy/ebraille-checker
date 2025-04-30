@@ -360,6 +360,22 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
           getCorrectedEPUBLocation(declaration.getLocation().getLine(),
               declaration.getLocation().getColumn(), fontURI != null ? fontURI : "null"));
     }
+
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      assert propertyName != null;
+      if (propertyName.startsWith("-epub-")
+          || propertyName.equals("text-transform") && !declaration.getComponents().isEmpty()
+              && declaration.getComponents().get(0).toCssString().equals("-epub-fullwidth"))
+      {
+        report
+            .message(MessageId.EBR_050,
+                getCorrectedEPUBLocation(declaration.getLocation().getLine(),
+                    declaration.getLocation().getColumn(),
+                    declaration.toCssString()),
+                propertyName);
+      }
+    }
   }
 
   private void registerURIs(List<CssConstruct> constructs, int line, int col)
@@ -391,7 +407,8 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
 
         if (url != null && context.referenceRegistry.isPresent())
         {
-          context.referenceRegistry.get().registerReference(url, type, getCorrectedEPUBLocation(line, col, cssContext));
+          context.referenceRegistry.get().registerReference(url, type,
+              getCorrectedEPUBLocation(line, col, cssContext));
           // register that a remote resource was found
           // no need to register a remote stylesheet, as these are disallowed
           // and will be reported elsewhere
@@ -463,10 +480,13 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
           EPUBLocation.of(context).at(startingLineNumber, startingColumnNumber),
           PackageVocabs.ITEM_VOCAB.getName(property));
     }
-    
-    if (mode == Mode.FILE) {
-      // Check that properties declared in the OPF item were found in the content
-      // We only check this for standalone CSS documents (not CSS inlined in HTML)
+
+    if (mode == Mode.FILE)
+    {
+      // Check that properties declared in the OPF item were found in the
+      // content
+      // We only check this for standalone CSS documents (not CSS inlined in
+      // HTML)
       Set<ITEM_PROPERTIES> uncheckedProperties = Sets
           .difference(declaredProperties, detectedProperties)
           .copyInto(EnumSet.noneOf(ITEM_PROPERTIES.class));
@@ -476,7 +496,9 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
         if (context.profile == EPUBProfile.EBRAILLE)
         {
           report.message(MessageId.EBR_002, context.opfItem.get().getLocation());
-        } else {
+        }
+        else
+        {
           report.message(MessageId.OPF_018,
               EPUBLocation.of(context).at(startingLineNumber, startingColumnNumber));
         }

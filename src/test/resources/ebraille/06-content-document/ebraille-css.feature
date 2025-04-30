@@ -24,9 +24,10 @@
 
   Rule: eBraille creators MUST NOT use `-epub-` prefixed properties
 
-    Example: allow a minimally valid eBraille content document
-      When checking document 'minimal.html'
-      Then no errors or warnings are reported
+    Example: report '-epub' prefixe properties
+      When checking document 'css-epub-prefixed-properties-error.html'
+      Then error EBR-050 is reported 11 times
+      And no other errors or warnings are reported
 
   Rule: CSS style sheets MUST be UTF-8 encoded
 
