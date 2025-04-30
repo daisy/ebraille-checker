@@ -32,5 +32,6 @@
   Rule: CSS style sheets MUST be UTF-8 encoded
 
     Example: report a stylesheet encoded in UTF-16
-      When checking document 'minimal.html'
-      Then no errors or warnings are reported
+      When checking file set 'css-encoding-utf16-error'
+      Then error CSS-004 is reported
+      And no other errors or warnings are reported

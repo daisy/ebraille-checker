@@ -32,6 +32,7 @@ import org.idpf.epubcheck.util.css.CssParser;
 import org.idpf.epubcheck.util.css.CssSource;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.opf.PublicationResourceChecker;
 import com.adobe.epubcheck.opf.ValidationContext;
@@ -140,7 +141,7 @@ public class CSSChecker extends PublicationResourceChecker
         charset = source.getInputStream().getBomCharset().get().toLowerCase(Locale.ROOT);
         if (!charset.equals("utf-8"))
         {
-          if (charset.startsWith("utf-16"))
+          if (charset.startsWith("utf-16") && context.profile != EPUBProfile.EBRAILLE)
           {
             report.message(MessageId.CSS_003, EPUBLocation.of(context), charset);
           } else {
@@ -152,7 +153,7 @@ public class CSSChecker extends PublicationResourceChecker
         charset = source.getInputStream().getCssCharset().get().toLowerCase(Locale.ROOT);
         if (!charset.equals("utf-8"))
         {
-          if (charset.startsWith("utf-16"))
+          if (charset.startsWith("utf-16") && context.profile != EPUBProfile.EBRAILLE)
           {
             report.message(MessageId.CSS_003, EPUBLocation.of(context), charset);
           } else {
