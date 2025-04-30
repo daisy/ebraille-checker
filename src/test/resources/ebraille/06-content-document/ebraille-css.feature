@@ -27,11 +27,19 @@ Feature: eBraille — Content documents
     Example: report '-epub' prefixe properties
       When checking document 'css-epub-prefixed-properties-error.html'
       Then error EBR-050 is reported 11 times
-      And no other errors or warnings are reported
+      And warning EBR-051 is reported (side effect due to the `text-transform` property)
+      But no other errors or warnings are reported
 
   Rule: CSS style sheets MUST be UTF-8 encoded
 
     Example: report a stylesheet encoded in UTF-16
       When checking file set 'css-encoding-utf16-error'
       Then error CSS-004 is reported
+      And no other errors or warnings are reported
+
+  Rule: eBraille creators SHOUD NOT use properties that affect the text's font
+
+    Example: report various font-related properties
+      When checking document 'css-font-styling-warning.html'
+      Then warning EBR-051 is reported 17 times
       And no other errors or warnings are reported

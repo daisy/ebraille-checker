@@ -361,15 +361,32 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
               declaration.getLocation().getColumn(), fontURI != null ? fontURI : "null"));
     }
 
+    // Check eBraille requirements
     if (context.profile == EPUBProfile.EBRAILLE)
     {
       assert propertyName != null;
+
+      // Report epub-prefixed properties
       if (propertyName.startsWith("-epub-")
           || propertyName.equals("text-transform") && !declaration.getComponents().isEmpty()
               && declaration.getComponents().get(0).toCssString().equals("-epub-fullwidth"))
       {
         report
             .message(MessageId.EBR_050,
+                getCorrectedEPUBLocation(declaration.getLocation().getLine(),
+                    declaration.getLocation().getColumn(),
+                    declaration.toCssString()),
+                propertyName);
+      }
+
+      // Report properties affecting the text font
+      if (propertyName.equals("color")
+          || propertyName.equals("font")
+          || propertyName.startsWith("font-")
+          || propertyName.startsWith("text-"))
+      {
+        report
+            .message(MessageId.EBR_051,
                 getCorrectedEPUBLocation(declaration.getLocation().getLine(),
                     declaration.getLocation().getColumn(),
                     declaration.toCssString()),
