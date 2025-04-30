@@ -543,6 +543,11 @@ public class OPFHandler extends XMLHandler
             itemBuilders.put(id.trim(), itemBuilder);
             itemBuildersByURL.put(url, itemBuilder);
 
+            if (context.profile == EPUBProfile.EBRAILLE && fallback != null)
+            {
+              report.message(MessageId.EBR_022, location());
+            }
+
             String mediaOverlay = e.getAttribute("media-overlay");
             itemBuilder.mediaOverlay(mediaOverlay);
           }
@@ -636,7 +641,8 @@ public class OPFHandler extends XMLHandler
       }
       else if (name.equals("meta"))
       {
-        if (context.profile == EPUBProfile.EBRAILLE && e.getAttribute("name") != null) {
+        if (context.profile == EPUBProfile.EBRAILLE && e.getAttribute("name") != null)
+        {
           report.message(MessageId.EBR_020, location(), "EPUB 2 \"meta\"");
         }
       }
