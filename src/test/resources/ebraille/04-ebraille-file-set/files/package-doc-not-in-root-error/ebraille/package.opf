@@ -14,7 +14,7 @@
     <meta property="a11y:brailleSystem">UEB grade1</meta>
     <meta property="a11y:completeTranscription">true</meta>
     <meta property="a11y:producer"> DAISY Consortium </meta>
-    <meta property="a11y:tactileGraphics"> false </meta>
+    <meta property="a11y:tactileGraphics"> none </meta>
     <!--Metadata recommended by eBraille -->
     <dc:publisher> DAISY Consortium </dc:publisher>
     <dc:description> Publication used for testing. </dc:description>
