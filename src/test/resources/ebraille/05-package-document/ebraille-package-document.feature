@@ -224,7 +224,15 @@ Feature: eBraille — Package document
       Then error EBR-018 is reported
       And no other errors or warnings are reported
 
+  ### 5.3.3 Required metadata
+
+  ## TODO
+
   ## 5.4 Manifest
+
+  Rule: the `manifest` element conforms to EPUB
+
+    This is covered by EPUB checks
 
   Rule: item property 'remote-resources' is not supported
 
@@ -256,5 +264,34 @@ Feature: eBraille — Package document
       (even when the CSS has no references to remote resources)
       When checking file set 'item-property-remote-resources-unwarranted-for-css-warning'
       Then warning EBR-002 is reported
+      And no other errors or warnings are reported
+
+  ## 5.5 Spine
+
+  Rule: the `spine` element conforms to EPUB
+
+    This is covered by EPUB checks
+
+  ## 5.6 Unsupported features
+
+  Rule: deprecated features MUST NOT be used
+
+    Example: TODO
+
+  Rule: legacy features MUST NOT be used
+
+    Example: report a package document using NCX navigation
+      When checking file 'unsupported-legacy-ncx-error.opf'
+      Then error EBR-020 is reported
+      And no other errors or warnings are reported
+
+    Example: report a package document using a guide element
+      When checking file 'unsupported-legacy-guide-error.opf'
+      Then error EBR-020 is reported
+      And no other errors or warnings are reported
+
+    Example: report a package document using an EPUB 2.0.1 `meta` element
+      When checking file 'unsupported-legacy-meta-error.opf'
+      Then error EBR-020 is reported
       And no other errors or warnings are reported
 

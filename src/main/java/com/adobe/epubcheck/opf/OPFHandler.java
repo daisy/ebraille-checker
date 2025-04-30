@@ -35,6 +35,7 @@ import java.util.Vector;
 import org.w3c.epubcheck.core.references.Reference;
 
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.util.DateParser;
 import com.adobe.epubcheck.util.EPUBVersion;
@@ -95,7 +96,7 @@ public class OPFHandler extends XMLHandler
 
   static
   {
-    String[] list = { 
+    String[] list = {
         "abr",
         "acp",
         "act",
@@ -581,6 +582,10 @@ public class OPFHandler extends XMLHandler
         String idref = e.getAttribute("toc");
         if (idref != null)
         {
+          if (context.profile == EPUBProfile.EBRAILLE)
+          {
+            report.message(MessageId.EBR_020, location(), "NCX");
+          }
           if (itemBuilders.containsKey(idref.trim()))
           {
             OPFItem.Builder toc = itemBuilders.get(idref.trim());
@@ -620,6 +625,19 @@ public class OPFHandler extends XMLHandler
           {
             report.message(MessageId.OPF_049, location(), idref);
           }
+        }
+      }
+      else if (name.equals("guide"))
+      {
+        if (context.profile == EPUBProfile.EBRAILLE)
+        {
+          report.message(MessageId.EBR_020, location(), "\"guide\"");
+        }
+      }
+      else if (name.equals("meta"))
+      {
+        if (context.profile == EPUBProfile.EBRAILLE && e.getAttribute("name") != null) {
+          report.message(MessageId.EBR_020, location(), "EPUB 2 \"meta\"");
         }
       }
       else if (name.equals("dc-metadata") || name.equals("x-metadata"))

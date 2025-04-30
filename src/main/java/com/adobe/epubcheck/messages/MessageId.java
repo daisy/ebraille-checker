@@ -108,6 +108,7 @@ public enum MessageId implements Comparable<MessageId>
   EBR_017("EBR-017"),
   EBR_018("EBR-018"),
   EBR_019("EBR-019"),
+  EBR_020("EBR-020"),
 
   // Messages relating to xhtml markup
   HTM_001("HTM-001"),
