@@ -101,6 +101,20 @@ class DefaultSeverities implements Severities
     severities.put(MessageId.EBR_004, Severity.ERROR);
     severities.put(MessageId.EBR_005, Severity.ERROR);
     severities.put(MessageId.EBR_006, Severity.ERROR);
+    severities.put(MessageId.EBR_007, Severity.ERROR);
+    severities.put(MessageId.EBR_008, Severity.ERROR);
+    severities.put(MessageId.EBR_009, Severity.ERROR);
+    severities.put(MessageId.EBR_009, Severity.ERROR);
+    severities.put(MessageId.EBR_010, Severity.ERROR);
+    severities.put(MessageId.EBR_011, Severity.WARNING);
+    severities.put(MessageId.EBR_012, Severity.ERROR);
+    severities.put(MessageId.EBR_013, Severity.WARNING);
+    severities.put(MessageId.EBR_014, Severity.ERROR);
+    severities.put(MessageId.EBR_015, Severity.ERROR);
+    severities.put(MessageId.EBR_016, Severity.ERROR);
+    severities.put(MessageId.EBR_017, Severity.ERROR);
+    severities.put(MessageId.EBR_018, Severity.ERROR);
+    severities.put(MessageId.EBR_019, Severity.ERROR);
 
     // HTML
     severities.put(MessageId.HTM_001, Severity.ERROR);

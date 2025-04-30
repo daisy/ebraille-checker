@@ -24,7 +24,6 @@ public final class AccessibilityVocab
     // eBraille content properties
     BRAILLE_CELL_TYPE,
     BRAILLE_SYSTEM,
-    GRAPHIC_TYPE,
     MINIMUM_CELLS,
     MINIMUM_LINES,
     TACTILE_GRAPHICS,

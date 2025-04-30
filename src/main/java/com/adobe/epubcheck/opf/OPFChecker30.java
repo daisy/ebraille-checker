@@ -25,6 +25,7 @@ package com.adobe.epubcheck.opf;
 import java.util.List;
 import java.util.Set;
 
+import org.daisy.ebraille.EBrailleMetadataChecker;
 import org.w3c.epubcheck.core.references.Reference;
 import org.w3c.epubcheck.util.url.URLFragment;
 
@@ -82,6 +83,7 @@ public class OPFChecker30 extends OPFChecker
     checkLinkedResources();
     checkCollections();
     checkMediaOverlaysDuration();
+    checkEBrailleMetadata();
     return true;
   }
 
@@ -395,6 +397,15 @@ public class OPFChecker30 extends OPFChecker
           }
         }
       }
+    }
+  }
+
+  private void checkEBrailleMetadata()
+  {
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      MetadataSet metadata = ((OPFHandler30) opfHandler).getMetadata();
+      new EBrailleMetadataChecker(context, metadata).check();
     }
   }
 
