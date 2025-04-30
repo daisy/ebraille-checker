@@ -23,8 +23,8 @@ import org.idpf.epubcheck.util.css.CssGrammar.CssQuantity.Unit;
 import org.idpf.epubcheck.util.css.CssGrammar.CssSelector;
 import org.idpf.epubcheck.util.css.CssGrammar.CssURI;
 import org.idpf.epubcheck.util.css.CssLocation;
-import org.w3c.epubcheck.core.references.URLChecker;
 import org.w3c.epubcheck.core.references.Reference;
+import org.w3c.epubcheck.core.references.URLChecker;
 
 import com.adobe.epubcheck.api.EPUBLocation;
 import com.adobe.epubcheck.api.EPUBProfile;
@@ -85,6 +85,13 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
     lineNumber = correctedLineNumber(lineNumber);
     columnNumber = correctedColumnNumber(lineNumber, columnNumber);
     return EPUBLocation.of(context).at(lineNumber, columnNumber).context(details);
+  }
+
+  private EPUBLocation getCorrectedEPUBLocation(CssConstruct construct)
+  {
+    int line = correctedLineNumber(construct.getLocation().getLine());
+    int col = correctedColumnNumber(line, construct.getLocation().getColumn());
+    return EPUBLocation.of(context).at(line, col).context(construct.toCssString());
   }
 
   private int correctedLineNumber(int lineNumber)
@@ -279,9 +286,7 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
         String value = cns.toCssString();
         if (value != null && value.equalsIgnoreCase("fixed"))
         {
-          report.message(MessageId.CSS_006,
-              getCorrectedEPUBLocation(declaration.getLocation().getLine(),
-                  declaration.getLocation().getColumn(), declaration.toCssString()));
+          report.message(MessageId.CSS_006, getCorrectedEPUBLocation(declaration));
         }
       }
     }
@@ -289,11 +294,7 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
     {
       if (propertyName.equals("direction") || propertyName.equals("unicode-bidi"))
       {
-        report
-            .message(MessageId.CSS_001,
-                getCorrectedEPUBLocation(declaration.getLocation().getLine(),
-                    declaration.getLocation().getColumn(), declaration.toCssString()),
-                propertyName);
+        report.message(MessageId.CSS_001, getCorrectedEPUBLocation(declaration), propertyName);
       }
     }
 
@@ -345,10 +346,8 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
                 }
                 if (!blessed)
                 {
-                  report.message(MessageId.CSS_007,
-                      getCorrectedEPUBLocation(declaration.getLocation().getLine(),
-                          declaration.getLocation().getColumn(), declaration.toCssString()),
-                      fontURL, fontMimeType);
+                  report.message(MessageId.CSS_007, getCorrectedEPUBLocation(declaration), fontURL,
+                      fontMimeType);
                 }
               }
 
@@ -413,12 +412,8 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
           && ((CssQuantity) component).getUnit() == Unit.LENGTH)
       {
 
-        report
-            .message(MessageId.EBR_052,
-                getCorrectedEPUBLocation(component.getLocation().getLine(),
-                    component.getLocation().getColumn(),
-                    component.toCssString()),
-                component.toCssString());
+        report.message(MessageId.EBR_052, getCorrectedEPUBLocation(component),
+            component.toCssString());
         reported = true;
       }
       else if (component instanceof CssComposedConstruct)
