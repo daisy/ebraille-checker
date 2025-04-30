@@ -1,4 +1,4 @@
- Feature: eBraille — Content documents
+Feature: eBraille — Content documents
   
   Checks conformance to the "Cascading Style Sheets" section of eBraille:
     https://daisy.github.io/ebraille/published/1.0/#html-css
