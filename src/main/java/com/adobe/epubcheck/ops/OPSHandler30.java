@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+import org.daisy.ebraille.EBrailleCharacterChecker;
 import org.w3c.epubcheck.constants.MIMEType;
 import org.w3c.epubcheck.core.references.Reference;
 import org.w3c.epubcheck.core.references.Reference.Type;
@@ -317,6 +318,11 @@ public class OPSHandler30 extends OPSHandler
     {
       anchorNeedsText = false;
     }
+
+    if (context.profile == EPUBProfile.EBRAILLE && isPalpable())
+    {
+      new EBrailleCharacterChecker(context, chars, arg1, arg2, location()).check();
+    }
   }
 
   @Override
@@ -457,11 +463,45 @@ public class OPSHandler30 extends OPSHandler
       }
     }
 
+    checkEBrailleContent();
+
     processInlineScripts();
 
     checkType(e.getAttributeNS(EpubConstants.EpubTypeNamespaceUri, "type"));
 
     checkSSMLPh(e.getAttributeNS("http://www.w3.org/2001/10/synthesis", "ph"));
+  }
+
+  private void checkEBrailleContent()
+  {
+    if (context.profile != EPUBProfile.EBRAILLE) return;
+
+    XMLElement e = currentElement();
+    String name = e.getName();
+    String content = null;
+    if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
+    {
+      if (name.equals("img") || name.equals("area"))
+      {
+        content = e.getAttribute("alt");
+      }
+      else if (name.equals("th"))
+      {
+        content = e.getAttribute("abbr");
+      }
+      else if (name.equals("track"))
+      {
+        content = e.getAttribute("label");
+      }
+      else if (name.equals("abbr") || name.equals("dfn"))
+      {
+        content = e.getAttribute("title");
+      }
+    }
+    if (content != null)
+    {
+      new EBrailleCharacterChecker(context, content, location()).check();
+    }
   }
 
   private void checkCiteAttribute()
