@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<title>Minimal eBraille</title>
+		<style>
+			body {
+				/* Font-relative length units (allowed) */
+				margin: 1em;
+				margin: 1ex;
+				margin: 1ch;
+				margin: 1rem;
+				
+				/* Viewport-relative length units (warning) */
+				margin: 1vh;
+				margin: 1vw;
+				margin: 1vmax;
+				margin: 1vmin;
+				
+				/* Absolute length units (warning) */
+				maring: 1cm;
+				maring: 1mm;
+				maring: 1Q;
+				maring: 1in;
+				maring: 1pt;
+				maring: 1pc;
+				maring: 1px;
+				
+				/* complex expressions are reported only once */
+				margin: calc(1rem - 2px) calc(1rem - 1px); /* reported once */
+				
+				/* Ignored quantities */
+				margin: 5%;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>⠠⠉⠓⠁⠏⠞⠑⠗⠀⠼⠁</h1>
+		<p>⠎⠕⠍⠑⠀⠞⠑⠭⠞</p>
+	</body>
+</html>

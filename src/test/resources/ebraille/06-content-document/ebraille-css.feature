@@ -43,3 +43,10 @@ Feature: eBraille — Content documents
       When checking document 'css-font-styling-warning.html'
       Then warning EBR-051 is reported 17 times
       And no other errors or warnings are reported
+
+  Rule: eBraille creators SHOUD use font-relative lenghts only
+
+    Example: report various non-font-relative lenghts units
+      When checking document 'css-unit-length-warning.html'
+      Then warning EBR-052 is reported 12 times
+      And no other errors or warnings are reported

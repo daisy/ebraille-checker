@@ -2,6 +2,7 @@ package com.adobe.epubcheck.css;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +16,10 @@ import org.idpf.epubcheck.util.css.CssGrammar;
 import org.idpf.epubcheck.util.css.CssGrammar.CssAtRule;
 import org.idpf.epubcheck.util.css.CssGrammar.CssComposedConstruct;
 import org.idpf.epubcheck.util.css.CssGrammar.CssConstruct;
+import org.idpf.epubcheck.util.css.CssGrammar.CssConstruct.Type;
 import org.idpf.epubcheck.util.css.CssGrammar.CssDeclaration;
+import org.idpf.epubcheck.util.css.CssGrammar.CssQuantity;
+import org.idpf.epubcheck.util.css.CssGrammar.CssQuantity.Unit;
 import org.idpf.epubcheck.util.css.CssGrammar.CssSelector;
 import org.idpf.epubcheck.util.css.CssGrammar.CssURI;
 import org.idpf.epubcheck.util.css.CssLocation;
@@ -392,7 +396,37 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
                     declaration.toCssString()),
                 propertyName);
       }
+
+      // Report units other than font-relative lengths
+      checkEBrailleUnit(declaration);
     }
+  }
+
+  private boolean checkEBrailleUnit(CssComposedConstruct construct)
+  {
+    boolean reported = false;
+    Iterator<CssConstruct> components = construct.getComponents().iterator();
+    while (!reported && components.hasNext())
+    {
+      CssConstruct component = components.next();
+      if (component.getType() == Type.QUANTITY
+          && ((CssQuantity) component).getUnit() == Unit.LENGTH)
+      {
+
+        report
+            .message(MessageId.EBR_052,
+                getCorrectedEPUBLocation(component.getLocation().getLine(),
+                    component.getLocation().getColumn(),
+                    component.toCssString()),
+                component.toCssString());
+        reported = true;
+      }
+      else if (component instanceof CssComposedConstruct)
+      {
+        reported = checkEBrailleUnit((CssComposedConstruct) component);
+      }
+    }
+    return reported;
   }
 
   private void registerURIs(List<CssConstruct> constructs, int line, int col)
