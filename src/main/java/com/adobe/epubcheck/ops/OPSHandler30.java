@@ -465,6 +465,8 @@ public class OPSHandler30 extends OPSHandler
 
     checkEBrailleContent();
 
+    checkEBrailleUnsupported();
+
     processInlineScripts();
 
     checkType(e.getAttributeNS(EpubConstants.EpubTypeNamespaceUri, "type"));
@@ -501,6 +503,26 @@ public class OPSHandler30 extends OPSHandler
     if (content != null)
     {
       new EBrailleCharacterChecker(context, content, location()).check();
+    }
+  }
+
+  private void checkEBrailleUnsupported()
+  {
+    if (context.profile != EPUBProfile.EBRAILLE) return;
+
+    XMLElement e = currentElement();
+    String name = e.getName();
+
+    if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
+    {
+      if (name.equals("script"))
+      {
+        report.message(MessageId.EBR_040, location());
+      }
+      else if (name.equals("form") && e.getAttribute("action") != null)
+      {
+        report.message(MessageId.EBR_041, location());
+      }
     }
   }
 

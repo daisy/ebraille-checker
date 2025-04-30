@@ -29,3 +29,29 @@
       When checking document 'content-latin-in-abbr-title-error.html'
       Then warning EBR-030 is reported
       And no other errors or warnings are reported
+
+  ### 6.2.2 List formatting
+  
+  Rule: `ol` and `ul` SHOULD embed the list number, letter, or glyph within each item
+
+    Note: not sure if this is testable?
+
+  Rule: eBraille creators SHOULD only use CSS for marking list items when the style sheet supplies the braille characters to display
+
+    Note: not sure if this is testable?
+
+  ### 6.2.3 Unsupported features
+
+  Rule: `script` elements MUST not be used
+
+    Example: report scripted HTML content
+      When checking document 'script-unsupported-error.html'
+      Then error EBR-040 is reported
+      And no other errors or warnings are reported
+
+  Rule: `form` elements with an `action` attribute MUST not be used
+
+    Example: report scripted HTML content
+      When checking document 'form-unsupported-error.html'
+      Then error EBR-041 is reported
+      And no other errors or warnings are reported
