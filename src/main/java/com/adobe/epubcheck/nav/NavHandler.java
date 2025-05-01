@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.w3c.epubcheck.core.references.Reference;
 
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.messages.MessageId;
 import com.adobe.epubcheck.opf.ValidationContext;
 import com.adobe.epubcheck.ops.OPSHandler30;
@@ -22,6 +23,8 @@ public class NavHandler extends OPSHandler30
 
   private NavType currentNavType = NavType.NONE;
   private boolean isNavTypes = false;
+
+  private boolean eBrailleLinkFound = false;
 
   private static enum NavType
   {
@@ -87,6 +90,25 @@ public class NavHandler extends OPSHandler30
         }
       }
     }
+
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
+      {
+        if ("link".equals(e.getName()) && "publication".equals(e.getAttribute("rel")))
+        {
+          eBrailleLinkFound = true;
+          String href = e.getAttribute("href");
+          if (!"package.opf".equals(href)) {
+            report.message(MessageId.EBR_081, location(), href);
+          }
+          String type = e.getAttribute("type");
+          if (!"application/oebps-package+xml".equals(type)) {
+            report.message(MessageId.EBR_082, location(), type);
+          }
+        }
+      }
+    }
   }
 
   @Override
@@ -97,6 +119,17 @@ public class NavHandler extends OPSHandler30
     if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()) && e.getName().equals("nav"))
     {
       currentNavType = NavType.NONE;
+    }
+    
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
+      {
+        if ("head".equals(e.getName()) && !eBrailleLinkFound)
+        {
+          report.message(MessageId.EBR_080, location());
+        }
+      }
     }
   }
 

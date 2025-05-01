@@ -8,9 +8,36 @@ Feature: eBraille — Primary entry page
     Given the test files located at '/ebraille/08-primary-entry-page/files/'
     And EPUBCheck configured with the 'EBRAILLE' profile
 
-#   Rule:
 
-#     Example:
-#       When checking file set ''
-#       Then error XXX is reported
-#       And no other errors or warnings are reported
+  ## 8.2 General requirements
+
+  Rule: the primary entry page MUST be a conforming EPUB navigation document
+
+    Example: allow a minimally valid navigation document
+      Given EPUBCheck configured to check a navigation document
+      When checking document 'index.html'
+      Then no errors or warnings are reported
+
+  Rule: the primary entry page MUST include a link element with a 'rel' attribute set to 'publication'
+
+    Example: report a navigation document with no link element to the package document
+      Given EPUBCheck configured to check a navigation document
+      When checking document 'index-publication-link-missing-error.html'
+      Then error EBR-080 is reported
+      And no other errors or warnings are reported
+
+  Rule: the publication link `href` attribute MUST specify the package document
+
+    Example: report a publication link that does not point to the package document
+      Given EPUBCheck configured to check a navigation document
+      When checking document 'index-publication-link-href-incorrect-error.html'
+      Then error EBR-081 is reported
+      And no other errors or warnings are reported
+
+  Rule: the publication link `type` attribute MUST contain the package document media type
+
+    Example: report a publication link with a wrong media type
+      Given EPUBCheck configured to check a navigation document
+      When checking document 'index-publication-link-type-incorrect-error.html'
+      Then error EBR-082 is reported
+      And no other errors or warnings are reported
