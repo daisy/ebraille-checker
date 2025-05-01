@@ -133,6 +133,7 @@ class DefaultSeverities implements Severities
     severities.put(MessageId.EBR_080, Severity.ERROR);
     severities.put(MessageId.EBR_081, Severity.ERROR);
     severities.put(MessageId.EBR_082, Severity.ERROR);
+    severities.put(MessageId.EBR_083, Severity.WARNING);
 
     // HTML
     severities.put(MessageId.HTM_001, Severity.ERROR);

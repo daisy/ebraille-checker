@@ -517,7 +517,12 @@ public class OPSHandler30 extends OPSHandler
     {
       if (name.equals("script"))
       {
-        report.message(MessageId.EBR_040, location());
+        // script is not allowed in eBraille, except for out-of-spine nav
+        if (!(context.opfItem.isPresent() && context.opfItem.get().isNav()
+            && !context.opfItem.get().isInSpine()))
+        {
+          report.message(MessageId.EBR_040, location());
+        }
       }
       else if (name.equals("form") && e.getAttribute("action") != null)
       {

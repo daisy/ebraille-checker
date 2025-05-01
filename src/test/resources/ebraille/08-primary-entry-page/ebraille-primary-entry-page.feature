@@ -41,3 +41,22 @@ Feature: eBraille — Primary entry page
       When checking document 'index-publication-link-type-incorrect-error.html'
       Then error EBR-082 is reported
       And no other errors or warnings are reported
+
+  Rule: the primary entry page SHOULD NOT be in the spine
+
+    Example: report if the primary entry page is in the spine
+      When checking file set 'index-in-spine-warning'
+      Then warning EBR-083 is reported
+      And no other errors or warnings are reported
+
+  Rule: the primary entry page MAY include `script` elements if it is out of spine
+
+    Example: allow a `script` element if the navigation is not in the spine
+      When checking file set 'script-out-of-spine-valid'
+      Then no other errors or warnings are reported
+
+    Example: report a `script` element if the navigation is in the spine
+      When checking file set 'script-when-in-spine-error'
+      Then error EBR-040 is reported
+      And warning EBR-083 is reported (side effect of index being in spine)
+      And no other errors or warnings are reported

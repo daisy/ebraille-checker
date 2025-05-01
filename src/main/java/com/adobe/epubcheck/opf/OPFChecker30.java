@@ -268,7 +268,7 @@ public class OPFChecker30 extends OPFChecker
     }
 
     // check eBraille item properties
-    checkEBrailleItem(item);
+    checkEBrailleSpineItem(item);
   }
 
   private void checkCollections()
@@ -414,8 +414,17 @@ public class OPFChecker30 extends OPFChecker
     }
   }
 
-  private void checkEBrailleItem(OPFItem item)
+  private void checkEBrailleSpineItem(OPFItem item)
   {
+    if (context.profile != EPUBProfile.EBRAILLE) return;
+
+    // check navigation document
+    if (item.isNav())
+    {
+      report.message(MessageId.EBR_083, item.getLocation());
+    }
+
+    // check layout property override
     if (item.getProperties()
         .contains(RenditionVocabs.ITEMREF_VOCAB
             .get(RenditionVocabs.ITEMREF_PROPERTIES.LAYOUT_PRE_PAGINATED)))
