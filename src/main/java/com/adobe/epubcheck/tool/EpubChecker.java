@@ -209,35 +209,42 @@ public class EpubChecker
     ValidationContext context = new ValidationContextBuilder().url(url)
         .report(report).resourceProvider(resourceProvider).mimetype(modeMimeTypeMap.get(opsType))
         .version(version).profile(profile).build();
-    
+
     Checker checker = null;
-    if (mode == null) {
-      checker = EpubCheckFactory.getInstance().newInstance(context);
-    } else {
-      switch (mode)
-      {
-      case "opf":
-        if (version == EPUBVersion.VERSION_2) {
-          checker = new OPFChecker(context);
-        } else {
-          checker = new OPFChecker30(context);
-        }
-        break;
-      case "xhtml":
-      case "svg":
-        checker = new OPSChecker(context);
-        break;
-      case "mo":
-        if (version == EPUBVersion.VERSION_3) checker = new OverlayChecker(context);
-        break;
-      case "nav":
-        if (version == EPUBVersion.VERSION_3) checker = new NavChecker(context);
-        break;
-      default:
-        break;
-      }
+    if (mode == null)
+    {
+      mode = "epub";
     }
-    
+    switch (mode)
+    {
+    case "epub":
+    case "exp":
+      checker = EpubCheckFactory.getInstance().newInstance(context);
+      break;
+    case "opf":
+      if (version == EPUBVersion.VERSION_2)
+      {
+        checker = new OPFChecker(context);
+      }
+      else
+      {
+        checker = new OPFChecker30(context);
+      }
+      break;
+    case "xhtml":
+    case "svg":
+      checker = new OPSChecker(context);
+      break;
+    case "mo":
+      if (version == EPUBVersion.VERSION_3) checker = new OverlayChecker(context);
+      break;
+    case "nav":
+      if (version == EPUBVersion.VERSION_3) checker = new NavChecker(context);
+      break;
+    default:
+      break;
+    }
+
     if (checker == null)
     {
       outWriter.println(messages.get("display_help"));
@@ -284,25 +291,28 @@ public class EpubChecker
       }
     }
   }
-  
-  
+
   private int processFile(Report report)
   {
     report.info(null, FeatureEnum.TOOL_NAME, "epubcheck");
     report.info(null, FeatureEnum.TOOL_VERSION, EpubCheck.version());
     report.info(null, FeatureEnum.TOOL_DATE, EpubCheck.buildDate());
     int result = 0;
-    Archive epub = null;
+
+     Archive epub = null;
 
     try
     {
-      if (expanded)
+
+      // TODO eBraille cleanup
+      if (expanded && profile != EPUBProfile.EBRAILLE)
       {
         // check existance of path (fix #525)
         File f = new File(path);
         if (!f.exists())
         {
-          System.err.println(String.format(messages.get("directory_not_found"), path));
+          System.err.println(String.format(messages.get("directory_not_found"),
+              path));
           return 1;
         }
 
@@ -320,17 +330,20 @@ public class EpubChecker
         }
 
       }
-    if (mode != null)
-    {
-      report.info(null, FeatureEnum.EXEC_MODE,
-          String.format(messages.get("single_file"), mode, version.toString(), profile));
-    }
-    result = validateFile(path, version, report, profile);
-      if (expanded && epub!=null)
+      if (mode != null)
       {
-        if (!keep || (report.getErrorCount() > 0) || (report.getFatalErrorCount() > 0))
+        report.info(null, FeatureEnum.EXEC_MODE,
+            String.format(messages.get("single_file"), mode, version.toString(), profile));
+      }
+      result = validateFile(path, version, report, profile);
+
+      if (expanded && epub != null)
+      {
+        if (!keep || (report.getErrorCount() > 0) ||
+            (report.getFatalErrorCount() > 0))
         {
-          if (keep && ((report.getErrorCount() > 0) || (report.getFatalErrorCount() > 0)))
+          if (keep && ((report.getErrorCount() > 0) ||
+              (report.getFatalErrorCount() > 0)))
           {
             // Notify if we are deleting for failures
             System.err.println(messages.get("deleting_archive"));
@@ -338,7 +351,6 @@ public class EpubChecker
           epub.deleteEpubFile();
         }
       }
-
 
       return result;
     } catch (Throwable e)
