@@ -25,6 +25,7 @@ public class NavHandler extends OPSHandler30
   private boolean isNavTypes = false;
 
   private boolean eBrailleLinkFound = false;
+  private boolean inPageList = false;
 
   private static enum NavType
   {
@@ -95,20 +96,51 @@ public class NavHandler extends OPSHandler30
     {
       if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
       {
+        // Check publication link
         if ("link".equals(e.getName()) && "publication".equals(e.getAttribute("rel")))
         {
           eBrailleLinkFound = true;
           String href = e.getAttribute("href");
-          if (!"package.opf".equals(href)) {
+          if (!"package.opf".equals(href))
+          {
             report.message(MessageId.EBR_081, location(), href);
           }
           String type = e.getAttribute("type");
-          if (!"application/oebps-package+xml".equals(type)) {
+          if (!"application/oebps-package+xml".equals(type))
+          {
             report.message(MessageId.EBR_082, location(), type);
+          }
+        }
+        // Check table of content
+        else if ("nav".equals(e.getName())
+            && "toc".equals(e.getAttributeNS(EpubConstants.EpubTypeNamespaceUri, "type")))
+        {
+          if (!"doc-toc".equals(e.getAttribute("role")))
+          {
+            report.message(MessageId.EBR_084, location());
+          }
+        }
+        // Check page list
+        else if ("nav".equals(e.getName())
+            && "page-list".equals(e.getAttributeNS(EpubConstants.EpubTypeNamespaceUri, "type")))
+        {
+          inPageList = true;
+          if (!"doc-pagelist".equals(e.getAttribute("role")))
+          {
+            report.message(MessageId.EBR_085, location());
+          }
+        }
+        // Check page list
+        else if ("a".equals(e.getName()) && inPageList)
+        {
+          if (e.getAttribute("title") == null)
+          {
+            report.message(MessageId.EBR_086, location());
           }
         }
       }
     }
+
   }
 
   @Override
@@ -120,7 +152,7 @@ public class NavHandler extends OPSHandler30
     {
       currentNavType = NavType.NONE;
     }
-    
+
     if (context.profile == EPUBProfile.EBRAILLE)
     {
       if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
@@ -128,6 +160,18 @@ public class NavHandler extends OPSHandler30
         if ("head".equals(e.getName()) && !eBrailleLinkFound)
         {
           report.message(MessageId.EBR_080, location());
+        }
+      }
+    }
+
+    if (context.profile == EPUBProfile.EBRAILLE)
+    {
+      if (EpubConstants.HtmlNamespaceUri.equals(e.getNamespace()))
+      {
+        // End current navigation
+        if ("nav".equals(e.getName()))
+        {
+          inPageList = false;
         }
       }
     }

@@ -60,3 +60,40 @@ Feature: eBraille — Primary entry page
       Then error EBR-040 is reported
       And warning EBR-083 is reported (side effect of index being in spine)
       And no other errors or warnings are reported
+
+
+  ## 8.3 Navigation
+
+  ## 8.3.1 Table of contents
+
+  Rule: the table of contents MUST also be identified by the role "doc-toc"
+
+    Example: report a table of content with no "doc-toc" role
+      Given EPUBCheck configured to check a navigation document
+      When checking file set 'index-toc-no-role-error.html'
+      Then error EBR-084 is reported
+      And no other errors or warnings are reported
+
+  ## 8.3.2 Page list
+
+  Rule: the table of contents MUST also be identified by the role "doc-pagelist"
+
+    Example: allow a conforming page list
+      Given EPUBCheck configured to check a navigation document
+      When checking file set 'index-pagelist-valid.html'
+      Then no errors or warnings are reported
+
+    Example: report a page list with no "doc-pagelist" role
+      Given EPUBCheck configured to check a navigation document
+      When checking file set 'index-pagelist-no-role-error.html'
+      Then error EBR-085 is reported
+      And no other errors or warnings are reported
+
+  Rule: Each entry in the page list MUST include the print page number equivalent in a title attribute
+
+    Example: report missing 'title' attributes on page list entries
+      Given EPUBCheck configured to check a navigation document
+      When checking file set 'index-pagelist-a-no-title-error.html'
+      Then error EBR-086 is reported
+      And no other errors or warnings are reported
+
