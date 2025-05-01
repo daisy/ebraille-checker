@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -194,6 +195,8 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
     {
       inKeyFrames = true;
     }
+
+    checkEBrailleMediaQueries(atRule);
   }
 
   @Override
@@ -422,6 +425,64 @@ public class CSSHandler implements CssContentHandler, CssErrorHandler
       }
     }
     return reported;
+  }
+
+  private void checkEBrailleMediaQueries(CssAtRule atRule)
+  {
+    if (context.profile != EPUBProfile.EBRAILLE) return;
+
+    switch (atRule.getName().get())
+    {
+    case "@media":
+    case "@import":
+      checkEBrailleMediaQueryForBrailleMediaType(atRule);
+      checkEBrailleMediaQueryForGridFeature(atRule);
+      checkEBrailleMediaQueryForScreenMediaType(atRule);
+      checkEBrailleMediaQueryForRelativeUnits(atRule);
+    }
+  }
+
+  private void checkEBrailleMediaQueryForBrailleMediaType(CssConstruct atRule)
+  {
+    if (CssGrammar.flatten(atRule).stream().anyMatch(
+        c -> c.getType() == Type.KEYWORD
+            && c.toCssString().equals("braille")))
+    {
+      report.message(MessageId.EBR_060, getCorrectedEPUBLocation(atRule), atRule.toCssString());
+    }
+  }
+
+  private void checkEBrailleMediaQueryForGridFeature(CssConstruct atRule)
+  {
+    if (CssGrammar.flatten(atRule).stream().anyMatch(
+        c -> c.getType() == Type.KEYWORD
+            && c.toCssString().equals("grid")))
+    {
+      report.message(MessageId.EBR_061, getCorrectedEPUBLocation(atRule), atRule.toCssString());
+    }
+  }
+
+  private void checkEBrailleMediaQueryForScreenMediaType(CssConstruct atRule)
+  {
+    if (CssGrammar.flatten(atRule).stream().anyMatch(
+        c -> c.getType() == Type.KEYWORD
+            && c.toCssString().equals("screen")))
+    {
+      report.message(MessageId.EBR_062, getCorrectedEPUBLocation(atRule), atRule.toCssString());
+    }
+  }
+
+  private void checkEBrailleMediaQueryForRelativeUnits(CssConstruct atRule)
+  {
+    Optional<CssConstruct> found = CssGrammar.flatten(atRule).stream()
+        .filter(c -> c.getType() == Type.QUANTITY
+            && ((CssQuantity) c).getUnit() == Unit.LENGTH)
+        .findFirst();
+    if (found.isPresent())
+    {
+      report.message(MessageId.EBR_052, getCorrectedEPUBLocation(found.get()),
+          found.get().toCssString());
+    }
   }
 
   private void registerURIs(List<CssConstruct> constructs, int line, int col)

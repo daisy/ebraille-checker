@@ -50,3 +50,73 @@ Feature: eBraille — Content documents
       When checking document 'css-unit-length-warning.html'
       Then warning EBR-052 is reported 12 times
       And no other errors or warnings are reported
+
+  ## 6.3.3 Media queries
+
+  Rule: Media queries MUST NOT include the deprecated `braille` media type
+
+    Example: report an `@media` media query using the `braille` media type
+      When checking document 'css-media-query-braille-in-atmedia-error.html'
+      Then error EBR-060 is reported 2 times
+      And no other errors or warnings are reported
+
+    Example: report an `@import` media query using the `braille` media type
+      When checking document 'css-media-query-braille-in-atimport-error.html'
+      Then error EBR-060 is reported
+      And no other errors or warnings are reported
+
+    Example: report an HTML `link` media query using the `braille` media type
+    Example: report an HTML `style` media query using the `braille` media type
+    Example: report an `xml-stylesheet` media query using the `braille` media type
+      Media query micro-syntax parsing is currently not suppored.
+
+  Rule: Media queries SHOULD NOT include references to the `grid` feature
+
+    Example: report an `@media` media query using the `grid` feature
+      When checking document 'css-media-query-grid-in-atmedia-warning.html'
+      Then warning EBR-061 is reported
+      And no other errors or warnings are reported
+
+    Example: report an `@import` media query using the `grid` feature
+      When checking document 'css-media-query-grid-in-atimport-warning.html'
+      Then warning EBR-061 is reported
+      And no other errors or warnings are reported
+
+    Example: report an HTML `link` media query using the `grid` feature
+    Example: report an HTML `style` media query using the `grid` feature
+    Example: report an `xml-stylesheet` media query using the `grid` feature
+      Media query micro-syntax parsing is currently not suppored.
+
+  Rule: Media queries SHOULD NOT include the `screen` media type
+
+    Example: report an `@media` media query using the `screen` media type
+      When checking document 'css-media-query-screen-in-atmedia-warning.html'
+      Then warning EBR-062 is reported
+      And no other errors or warnings are reported
+
+    Example: report an `@import` media query using the `screen` media type
+      When checking document 'css-media-query-screen-in-atimport-warning.html'
+      Then warning EBR-062 is reported
+      And no other errors or warnings are reported
+
+    Example: report an HTML `link` media query using the `screen` media type
+    Example: report an HTML `style` media query using the `screen` media type
+    Example: report an `xml-stylesheet` media query using the `screen` media type
+      Media query micro-syntax parsing is currently not suppored.
+
+  Rule: Media queries SHOULD use font-relative lengths
+
+    Example: report an `@media` media query using an absolute length unit
+      When checking document 'css-media-query-unit-length-in-atmedia-warning.html'
+      Then warning EBR-052 is reported
+      And no other errors or warnings are reported
+
+    Example: report an `@import` media query using an absolute length unit
+      When checking document 'css-media-query-unit-length-in-atimport-warning.html'
+      Then warning EBR-052 is reported
+      And no other errors or warnings are reported
+
+    Example: report an HTML `link` media query using an absolute length unit
+    Example: report an HTML `style` media query using an absolute length unit
+    Example: report an `xml-stylesheet` media query using an absolute length unit
+      Media query micro-syntax parsing is currently not suppored.
