@@ -22,6 +22,7 @@
 
 package com.adobe.epubcheck.opf;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,6 +43,7 @@ import com.adobe.epubcheck.util.FeatureEnum;
 import com.adobe.epubcheck.vocab.DCMESVocab;
 import com.adobe.epubcheck.vocab.MediaOverlaysVocab;
 import com.adobe.epubcheck.vocab.PackageVocabs;
+import com.adobe.epubcheck.vocab.RenditionVocabs;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
@@ -264,6 +266,9 @@ public class OPFChecker30 extends OPFChecker
         report.message(MessageId.OPF_044, item.getLocation(), mimeType);
       }
     }
+
+    // check eBraille item properties
+    checkEBrailleItem(item);
   }
 
   private void checkCollections()
@@ -407,6 +412,24 @@ public class OPFChecker30 extends OPFChecker
       MetadataSet metadata = ((OPFHandler30) opfHandler).getMetadata();
       new EBrailleMetadataChecker(context, metadata).check();
     }
+  }
+
+  private void checkEBrailleItem(OPFItem item)
+  {
+    if (item.getProperties()
+        .contains(RenditionVocabs.ITEMREF_VOCAB
+            .get(RenditionVocabs.ITEMREF_PROPERTIES.LAYOUT_PRE_PAGINATED)))
+    {
+      report.message(MessageId.EBR_071, item.getLocation());
+    }
+
+    // check FXL properties overrides
+    EnumSet.allOf(RenditionVocabs.ITEMREF_PROPERTIES.class).stream()
+        .filter(p -> p.name().matches("(SPREAD_|PAGE_|ORIENTATION_).*"))
+        .map(RenditionVocabs.ITEMREF_VOCAB::get).filter(item.getProperties()::contains)
+        .findFirst().ifPresent(
+            prop -> report.message(MessageId.EBR_072, item.getLocation(), prop.getPrefixedName()));
+
   }
 
   private void checkIndexCollection(ResourceCollection collection)

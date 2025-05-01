@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="uid">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title id="title">Minimal eBraille</dc:title>
+    <dc:language>en-Brai</dc:language>
+    <dc:identifier id="uid">urn:uuid:8DCD4DF0-8C0C-4D04-A320-23DE491A1BD0</dc:identifier>
+    <meta property="dcterms:modified">2025-01-01T00:00:01Z</meta>
+    <!--Metadata required by eBraille -->
+    <dc:creator>DAISY</dc:creator>
+    <dc:date>2025-01-01</dc:date>
+    <dc:format>eBraille 1.0</dc:format>
+    <meta property="dcterms:dateCopyrighted">2025-01-01</meta>
+    <meta property="a11y:brailleCellType">6</meta>
+    <meta property="a11y:brailleSystem">UEB grade1</meta>
+    <meta property="a11y:completeTranscription">true</meta>
+    <meta property="a11y:producer"> DAISY Consortium </meta>
+    <meta property="a11y:tactileGraphics"> none </meta>
+    <!--Metadata recommended by eBraille -->
+    <dc:publisher> DAISY Consortium </dc:publisher>
+    <dc:description> Publication used for testing. </dc:description>
+    <dc:rights>Published under the terms of the 3-Clause BSD License</dc:rights>
+    <dc:source id="src">urn:uuid:BBFCCE57-2466-483B-9B96-BC2461809F95</dc:source>
+    <meta property="dcterms:publisher" refines="#src"> DAISY Consortium </meta>
+    <meta property="dcterms:date" refines="#src"> 2025-01-01 </meta>
+    <dc:subject> Testing </dc:subject>
+    <meta property="dcterms:educationLevel"> None </meta>
+  </metadata>
+  <manifest>
+    <item id="nav" href="index.html" media-type="application/xhtml+xml" properties="nav"/>
+    <item id="content_001" href="ebraille/content_001.html" media-type="application/xhtml+xml"/>
+  </manifest>
+  <spine>
+    <itemref idref="content_001" properties="rendition:layout-pre-paginated"/>
+  </spine>
+</package>

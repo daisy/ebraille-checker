@@ -10,6 +10,9 @@ import static com.adobe.epubcheck.vocab.DCMESVocab.PROPERTIES.DATE;
 import static com.adobe.epubcheck.vocab.DCMESVocab.PROPERTIES.FORMAT;
 import static com.adobe.epubcheck.vocab.DCMESVocab.PROPERTIES.IDENTIFIER;
 import static com.adobe.epubcheck.vocab.DCMESVocab.PROPERTIES.LANGUAGE;
+import static com.adobe.epubcheck.vocab.RenditionVocabs.META_PROPERTIES.LAYOUT;
+import static com.adobe.epubcheck.vocab.RenditionVocabs.META_PROPERTIES.ORIENTATION;
+import static com.adobe.epubcheck.vocab.RenditionVocabs.META_PROPERTIES.SPREAD;
 
 import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +20,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
+import java.util.Arrays;
 import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +40,7 @@ import com.adobe.epubcheck.vocab.AccessibilityVocab;
 import com.adobe.epubcheck.vocab.DCMESVocab;
 import com.adobe.epubcheck.vocab.ForeignVocabs;
 import com.adobe.epubcheck.vocab.Property;
+import com.adobe.epubcheck.vocab.RenditionVocabs;
 import com.google.common.base.Preconditions;
 
 public class EBrailleMetadataChecker extends AbstractChecker implements Checker
@@ -174,6 +179,22 @@ public class EBrailleMetadataChecker extends AbstractChecker implements Checker
         report.message(MessageId.EBR_018, location, value);
       }
     }
+
+    // FXL properties
+    property = RenditionVocabs.META_VOCAB.get(LAYOUT);
+    if (metadata.containsPrimary(property, "pre-paginated"))
+    {
+      report.message(MessageId.EBR_070, location);
+    }
+    for (Property fxl : Arrays.asList(RenditionVocabs.META_VOCAB.get(ORIENTATION),
+        RenditionVocabs.META_VOCAB.get(SPREAD)))
+    {
+      if (metadata.containsPrimary(fxl))
+      {
+        report.message(MessageId.EBR_072, location, fxl.getPrefixedName());
+      }
+    }
+
   }
 
   private boolean checkRequiredElement(Property property)
